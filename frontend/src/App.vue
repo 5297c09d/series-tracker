@@ -4,20 +4,34 @@
       <h1>Series Tracker</h1>
     </header>
     <main>
-      <RegistrationForm />
+      <!-- <RegistrationForm /> -->
+      <LoginForm />
     </main>
     <footer></footer>
   </section>
 </template>
 
 <script>
-import RegistrationForm from './components/RegistrationForm.vue'
+//Login Form 💛
+
+import LoginForm from './components/LoginForm.vue'
 
 export default {
   components: {
-    RegistrationForm
+    LoginForm
   },
 }
+
+
+//Registration Form 💜
+
+// import RegistrationForm from './components/RegistrationForm.vue'
+
+// export default {
+//   components: {
+//     RegistrationForm
+//   },
+// }
 
 </script>
 
