@@ -1,13 +1,16 @@
 [tool.poetry]
-name = "backend"
+name = "app"
 version = "0.1.0"
 description = ""
-authors = ["a-yermakova <106320233+a-yermakova@users.noreply.github.com>"]
+authors = ["Anastasia Yermakova <ertya0909@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-django = "^4.2.5"
+django = "^4.2.6"
+pydantic = "^2.4.2"
+pytest = "^7.4.2"
+pytest-django = "^4.5.2"
 
 
 [build-system]
