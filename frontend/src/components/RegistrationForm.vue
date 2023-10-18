@@ -17,7 +17,11 @@
       </div>
 
       <button type="submit" class="rounded-button">Sign up</button>
+
     </form>
+    <div class="success-message" v-if="showSuccessMessage">
+      Registration successful
+    </div>
   </div>
 </template>
 
@@ -30,8 +34,9 @@ export default {
       formData: {
         username: '',
         password1: '',
-        password2: ''
-      }
+        password2: '',
+      },
+    showSuccessMessage: false,
     };
   },
   methods: {
@@ -50,9 +55,10 @@ export default {
             'Content-Type': 'application/json',
           },
         })
-        .then((response) => {
+        .then(() => {
           // Здесь обрабатывается ответ, например, выводится сообщение об успехе
-          console.log('Registration successful:', response.data);
+          this.showSuccessMessage = true
+      
         })
         .catch((error) => {
           // Обработка ошибок, например, вывод сообщения об ошибке
