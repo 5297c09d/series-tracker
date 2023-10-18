@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter'; // Import MockAdapter from axios-m
 import RegistrationForm from '../components/RegistrationForm.vue';
 import axios from 'axios';
 
-test('it should work', async () => {
+test('test registration form can register', async () => {
     const regFormWrapper = mount(RegistrationForm);
     const axiosMock = new MockAdapter(axios);
 

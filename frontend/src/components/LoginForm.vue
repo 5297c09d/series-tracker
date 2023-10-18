@@ -1,30 +1,28 @@
 <template>
-  <div class="registration-card">
-    <form class="registration-form" @submit.prevent="submitForm">
+  <div class="login-card">
+    <form class="login-form" @submit.prevent="submitForm">
       <div class="input-container">
         <label for="username">User Name:</label>
         <input type="text" id="username" v-model="formData.username" required>
       </div>
 
       <div class="input-container">
-        <label for="password1">Password:</label>
-        <input type="password" id="password1" v-model="formData.password1" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" v-model="formData.password" required>
       </div>
 
-      <div class="input-container">
-        <label for="password2">Repeat the password:</label>
-        <input type="password" id="password2" v-model="formData.password2" required>
-      </div>
-
-      <button type="submit" class="rounded-button">Sign up</button>
+      <button type="submit" class="rounded-button">Log in</button>
 
     </form>
-    <div class="success-message" v-if="showSuccessMessage">
-      Registration successful
+    <div v-if="showSuccessMessage">
+      Login successful
+    </div>
+    <div class="error-message" v-if="showErrorMessage">
+      Login failed. Please check your credentials.
     </div>
   </div>
 </template>
-
+  
 <script>
 import axios from 'axios';
 
@@ -33,58 +31,55 @@ export default {
     return {
       formData: {
         username: '',
-        password1: '',
-        password2: '',
+        password: '',
       },
-    showSuccessMessage: false,
+      showSuccessMessage: false,
+      showErrorMessage: false,
     };
   },
   methods: {
-  submitForm() {
+    async submitForm() {
       // Определите данные, которые вы хотите отправить в формате JSON
       const jsonData = {
         username: this.formData.username,
-        password1: this.formData.password1,
-        password2: this.formData.password2,
+        password: this.formData.password,
       };
-    
-      //Отправить POST-запрос с данными в формате JSON на указанную конечную точку
-      axios
-        .post('/api/v1/auth/register', jsonData, {
+
+      try {
+        const response = await axios.post('/api/v1/auth/login', jsonData, {
           headers: {
             'Content-Type': 'application/json',
           },
-        })
-        .then(() => {
-          // Здесь обрабатывается ответ, например, выводится сообщение об успехе
-          this.showSuccessMessage = true
-      
-        })
-        .catch((error) => {
-          // Обработка ошибок, например, вывод сообщения об ошибке
-          console.error('Registration error:', error);
         });
+
+        if (response.status === 200) {
+          this.showSuccessMessage = true;
+        } else {
+          this.showErrorMessage = true;
+        }
+
+      } catch (error) {
+        this.showErrorMessage = true;
+      }
     },
   },
 };
 </script>
-
+  
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
 
-.registration-card {
+.login-card {
   background-color: #8ca0ff;
   border-radius: 100px;
-  /* Rounded corners for the card */
   box-shadow: 0 5px 13px rgb(63, 63, 63);
-  /* Shadow effect */
   padding: 50px;
   max-width: 300px;
   width: 100%;
   text-align: center;
 }
 
-.registration-form {
+.login-form {
   font-family: 'Comic Neue', cursive;
   display: grid;
   grid-template-columns: 1fr;
@@ -129,4 +124,11 @@ button.rounded-button:hover {
   transform: scale(1.05);
   color: #ffffff;
 }
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
 </style>
+  
