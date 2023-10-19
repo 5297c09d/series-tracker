@@ -10,7 +10,7 @@ test('test registration form can register', async () => {
     const expectedData = {
         username: 'testuser',
         password1: 'testpassword1',
-        password2: 'testpassword2',
+        password2: 'testpassword1',
     };
 
     axiosMock.onPost('/api/v1/auth/register').reply(200, 'Success');
@@ -24,3 +24,4 @@ test('test registration form can register', async () => {
 
     axiosMock.restore();
 });
+

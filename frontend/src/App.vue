@@ -3,35 +3,23 @@
     <header class="header">
       <h1>Series Tracker</h1>
     </header>
-    <main>
-      <!-- <RegistrationForm /> -->
-      <LoginForm />
+    <main>|
+        <div id="app">
+          <router-view></router-view>
+          <button class="button-spacing"> <router-link to="/">Первый</router-link> </button>
+          <button class="button-spacing"> <router-link to="/about">Второй</router-link> </button>
+        </div>
     </main>
     <footer></footer>
   </section>
 </template>
 
 <script>
-//Login Form 💛
-
-import LoginForm from './components/LoginForm.vue'
 
 export default {
   components: {
-    LoginForm
   },
 }
-
-
-//Registration Form 💜
-
-// import RegistrationForm from './components/RegistrationForm.vue'
-
-// export default {
-//   components: {
-//     RegistrationForm
-//   },
-// }
 
 </script>
 
@@ -56,9 +44,9 @@ body,
   width: 100%;
   height: 100%;
   grid-template-areas:
-    "head"
-    "main"
-    "foot";
+    "head   head  head"
+    "main   main  main"
+    "foot   foot  foot";
   grid-template-rows: 50px 1fr 30px;
 }
 
@@ -95,4 +83,8 @@ body,
   text-align: center;
   /* Выравнивание текста по центру горизонтально */
 }
+
+/* .main-content {
+  margin-left: 20px;
+  /* Задайте нужное значение отступа влево */
 </style>

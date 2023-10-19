@@ -38,6 +38,7 @@ export default {
     };
   },
   methods: {
+
     async submitForm() {
       // Определите данные, которые вы хотите отправить в формате JSON
       const jsonData = {
@@ -62,8 +63,17 @@ export default {
         this.showErrorMessage = true;
       }
     },
+
+    goToDashboard(isAuthenticated) {
+      if (isAuthenticated) {
+        this.$router.push('/dashboard');
+      } else {
+        this.$router.push('/login');
+      }
+    },
   },
 };
+
 </script>
   
 <style scoped>
