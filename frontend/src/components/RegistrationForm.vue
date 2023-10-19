@@ -1,34 +1,34 @@
 <template>
   <div class="registration-card">
     <form class="registration-form" @submit.prevent="submitForm">
-      <div class="input-container">
+      <div class="input-container" :class="{ 'has-error': passwordsMissmatch }">
         <label for="username">User Name:</label>
         <input type="text" id="username" v-model="formData.username" required>
       </div>
 
-      <div class="input-container">
+      <div class="input-container" :class="{ 'has-error': passwordsMissmatch }">
         <label for="password1">Password:</label>
         <input type="password" id="password1" v-model="formData.password1" required>
       </div>
 
-      <div class="input-container">
+      <div class="input-container" :class="{ 'has-error': passwordsMissmatch }">
         <label for="password2">Repeat the password:</label>
         <input type="password" id="password2" v-model="formData.password2" required>
       </div>
-
       <button type="submit" class="rounded-button">Sign up</button>
-
+      <div v-if="passwordsMissmatch" class="error-message">Пароли введены неверно</div>
     </form>
     <div class="success-message" v-if="showSuccessMessage">
       Registration successful
     </div>
   </div>
 </template>
-
+  
 <script>
 import axios from 'axios';
 
 export default {
+
   data() {
     return {
       formData: {
@@ -36,39 +36,48 @@ export default {
         password1: '',
         password2: '',
       },
-    showSuccessMessage: false,
+      showSuccessMessage: false,
+      passwordsMissmatch: false, // Добавляем состояние для проверки совпадения паролей
     };
   },
+
   methods: {
-  submitForm() {
-      // Определите данные, которые вы хотите отправить в формате JSON
-      const jsonData = {
-        username: this.formData.username,
-        password1: this.formData.password1,
-        password2: this.formData.password2,
-      };
-    
-      //Отправить POST-запрос с данными в формате JSON на указанную конечную точку
-      axios
-        .post('/api/v1/auth/register', jsonData, {
+    async submitForm() {
+      if (this.formData.password1 !== this.formData.password2) {
+        this.passwordsMissmatch = true
+        return;
+
+      } else {
+        this.passwordsMissmatch = false
+      }
+
+      try {
+        // Определите данные, которые вы хотите отправить в формате JSON
+        const jsonData = {
+          username: this.formData.username,
+          password1: this.formData.password1,
+          password2: this.formData.password2,
+        };
+
+        // Отправить POST-запрос с данными в формате JSON на указанную конечную точку
+        await axios.post('/api/v1/auth/register', jsonData, {
           headers: {
             'Content-Type': 'application/json',
           },
-        })
-        .then(() => {
-          // Здесь обрабатывается ответ, например, выводится сообщение об успехе
-          this.showSuccessMessage = true
-      
-        })
-        .catch((error) => {
-          // Обработка ошибок, например, вывод сообщения об ошибке
-          console.error('Registration error:', error);
         });
+
+        // Здесь обрабатывается ответ, например, выводится сообщение об успехе
+        this.showSuccessMessage = true;
+      } catch (error) {
+        // Обработка ошибок, например, вывод сообщения об ошибке
+        console.error('Registration error:', error);
+      }
     },
   },
 };
 </script>
-
+  
+  
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
 
@@ -129,4 +138,17 @@ button.rounded-button:hover {
   transform: scale(1.05);
   color: #ffffff;
 }
+
+.has-error {
+  border: 1px solid red;
+  /* Устанавливаем красную рамку для полей */
+}
+
+.error-message {
+  color: red;
+  /* Устанавливаем красный цвет для текстового сообщения */
+  font-size: 14px;
+  /* Устанавливаем размер шрифта */
+}
 </style>
+  
