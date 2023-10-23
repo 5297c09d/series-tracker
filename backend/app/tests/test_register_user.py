@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 from django.test import Client
 
-from polls.models import User
+from core.models import User
 
 client = Client()
 
