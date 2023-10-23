@@ -6,7 +6,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   { path: '/', component: LoginForm },
-  { path: '/about', component: RegistrationForm },
+  { path: '/registration', component: RegistrationForm },
 ];
 
 const router = createRouter({

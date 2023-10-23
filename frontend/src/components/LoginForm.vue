@@ -20,6 +20,7 @@
     <div class="error-message" v-if="showErrorMessage">
       Login failed. Please check your credentials.
     </div>
+    <button class="button-spacing"> <router-link to="/registration">Register a new account</router-link> </button>
   </div>
 </template>
   
@@ -87,6 +88,10 @@ export default {
   max-width: 300px;
   width: 100%;
   text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .login-form {
@@ -95,7 +100,6 @@ export default {
   grid-template-columns: 1fr;
   grid-gap: 20px;
   max-width: 400px;
-  margin: 0 auto;
 }
 
 .input-container {
@@ -139,6 +143,10 @@ button.rounded-button:hover {
   color: red;
   font-weight: bold;
   margin-top: 10px;
+}
+
+.button-spacing {
+  margin-top: 30px; 
 }
 </style>
   

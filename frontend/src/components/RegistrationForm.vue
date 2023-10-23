@@ -16,11 +16,12 @@
         <input type="password" id="password2" v-model="formData.password2" required>
       </div>
       <button type="submit" class="rounded-button">Sign up</button>
-      <div v-if="passwordsMissmatch" class="error-message">Пароли введены неверно</div>
+      <div v-if="passwordsMissmatch" class="error-message">Passwords entered incorrectly, try again</div>
     </form>
     <div class="success-message" v-if="showSuccessMessage">
       Registration successful
     </div>
+    <button class="button-spacing"> <router-link to="/">Do you have an account already?</router-link> </button>
   </div>
 </template>
   
@@ -91,6 +92,10 @@ export default {
   max-width: 300px;
   width: 100%;
   text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .registration-form {
@@ -99,7 +104,6 @@ export default {
   grid-template-columns: 1fr;
   grid-gap: 20px;
   max-width: 400px;
-  margin: 0 auto;
 }
 
 .input-container {
@@ -149,6 +153,10 @@ button.rounded-button:hover {
   /* Устанавливаем красный цвет для текстового сообщения */
   font-size: 14px;
   /* Устанавливаем размер шрифта */
+}
+
+.button-spacing {
+  margin-top: 30px; 
 }
 </style>
   
