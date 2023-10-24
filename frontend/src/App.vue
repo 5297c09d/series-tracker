@@ -5,7 +5,8 @@
     </header>
     <main>|
         <div id="app">
-          <router-view></router-view>
+          <bookmarksPage></bookmarksPage>
+         <!---как то сделать сюда импорт из loginPage и страницы закладок-->
         </div>
     </main>
     <footer></footer>
@@ -14,9 +15,13 @@
 
 <script>
 
+import bookmarksPage from './pages/bookmarksPage.vue';
+
 export default {
+  name: 'App',
   components: {
-  },
+    bookmarksPage,
+  }
 }
 
 </script>
@@ -82,7 +87,5 @@ body,
   /* Выравнивание текста по центру горизонтально */
 }
 
-/* .main-content {
-  margin-left: 20px;
-  /* Задайте нужное значение отступа влево */
+
 </style>
