@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from django.urls import reverse
 from django.test import Client
@@ -19,10 +21,11 @@ def test_series_list_view_can_return_response():
     )
     test_user.save()
     test_user_id = test_user.id
+    another_user_id = test_user_id + 1
 
     test_bookmark_data = {
         "series_name": "test",
-        "series_link": "https://test.com",
+        "series_link": "https://test.com/",
         "owner_id": test_user.id
     }
     test_bookmark = Bookmark.objects.create(
@@ -33,14 +36,24 @@ def test_series_list_view_can_return_response():
     test_bookmark.save()
 
     response = client.get(reverse('serials', kwargs={'user_id': test_user_id}))
-
     assert response.status_code == 403
 
     response = client.post(reverse('login'), data=test_user_data, content_type='application/json')
+
+    response = client.get(reverse('serials', kwargs={'user_id': another_user_id}))
+    assert response.status_code == 403
+
     response = client.get(reverse('serials', kwargs={'user_id': test_user_id}))
 
     assert response.status_code == 200
-    assert response.json()
-    assert test_bookmark_data['series_name'] == response.json()[0]['series_name']
-    assert test_bookmark_data['series_link'] == response.json()[0]['series_link']
-    assert test_bookmark_data['owner_id'] == response.json()[0]['owner_id']
+    response = json.loads(response.json())
+    assert test_bookmark_data['series_name'] == response[0]['series_name']
+    assert test_bookmark_data['series_link'] == response[0]['series_link']
+    assert test_bookmark_data['owner_id'] == response[0]['owner_id']
+
+    test_bookmark.delete()
+    empty_response = client.get(reverse('serials', kwargs={'user_id': test_user_id}))
+
+    assert empty_response.status_code == 200
+    empty_response = json.loads(empty_response.json())
+    assert len(empty_response) == 0
