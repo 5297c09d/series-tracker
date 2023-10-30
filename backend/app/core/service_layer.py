@@ -34,19 +34,13 @@ def login_user_service(request: WSGIRequest, login_user_vo: LoginUserVO):
 
 
 def serials_list_service(request: WSGIRequest, user_id: SerialsListVO):
-    try:
-        check_auth_service(request)
-        if request.user.id != user_id.user_id:
-            raise PermissionDenied
-    except PermissionDenied:
-        return HttpResponse(status=403)
-    else:
-        serials_query = list(Bookmark.objects.filter(owner=user_id.user_id).values())
-        return json.dumps(serials_query)
+    validate_auth_service(request.user)
+    if request.user.id != user_id.user_id:
+        raise PermissionDenied
+    serials_query = list(Bookmark.objects.filter(owner=user_id.user_id).values())
+    return serials_query
 
 
-def check_auth_service(request: WSGIRequest):
-    if request.user.is_authenticated:
-        return None
-    else:
+def validate_auth_service(user: User):
+    if not user.is_authenticated:
         raise PermissionDenied

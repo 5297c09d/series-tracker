@@ -1,4 +1,6 @@
+import json
 
+from django.core.exceptions import PermissionDenied
 from django.core.handlers.wsgi import WSGIRequest
 
 from django.http import JsonResponse, HttpResponse
@@ -40,7 +42,10 @@ def login_user_view(request: WSGIRequest):
 @csrf_exempt
 def serials_list_view(request: WSGIRequest, user_id: int):
     serials_list_vo = SerialsListVO(user_id=user_id)
-    response = serials_list_service(request, serials_list_vo)
+    try:
+        response = json.dumps(serials_list_service(request, serials_list_vo))
+    except PermissionDenied:
+        return HttpResponse(status=403)
     if isinstance(response, HttpResponse):
         return response
     else:
