@@ -9,7 +9,6 @@ client = Client()
 
 @pytest.mark.django_db
 def test_register_user_view_can_return_response():
-    # Given
     test_username = 'abc'
     test_password = 'abc'
     data = {
@@ -48,3 +47,18 @@ def test_login_user_view_can_return_response():
     assert response.status_code == 200
     assert test_user_id == response_user
     assert response.cookies['sessionid']
+
+
+@pytest.mark.django_db
+def test_login_user_view_can_return_error_in_case_user_does_not_exist():
+    test_username = 'abc'
+    test_password = 'abc'
+    data = {
+        "username": test_username,
+        "password": test_password
+    }
+
+    response = client.post(reverse('login'), data=data, content_type='application/json')
+
+    assert response.status_code == 403
+    assert response.json()[0] == "user_does_not_exist"

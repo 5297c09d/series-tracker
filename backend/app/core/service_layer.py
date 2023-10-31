@@ -1,12 +1,13 @@
-import pydantic
+
 from django.contrib.auth import authenticate, login
+from django.core.exceptions import PermissionDenied
 from django.core.handlers.wsgi import WSGIRequest
 
-from core.models import User
-from core.validators import LoginUserVO, LoginUserRequest, RegisterUserVO
+from core.models import User, Bookmark
+from validators.validators import LoginUserVO, LoginUserRequest, RegisterUserVO, CheckAuthVO, SerialsListVO
 
 
-def register_user_service(request, register_user_vo: RegisterUserVO):
+def register_user_service(request: WSGIRequest, register_user_vo: RegisterUserVO):
     user = User.objects.create_user(
         username=register_user_vo.username,
         password=register_user_vo.password
@@ -27,4 +28,17 @@ def login_user_service(request: WSGIRequest, login_user_vo: LoginUserVO):
     if user is not None:
         login(request, user)
         return {'user_id': user.id}
-    return User.DoesNotExist
+    raise User.DoesNotExist("user_does_not_exist")
+
+
+def serials_list_service(request: WSGIRequest, user_id: SerialsListVO):
+    validate_auth_service(request.user)
+    if request.user.id != user_id.user_id:
+        raise PermissionDenied("user_has_no_permission")
+    serials_query = list(Bookmark.objects.filter(owner=user_id.user_id).values())
+    return serials_query
+
+
+def validate_auth_service(user: User):
+    if not user.is_authenticated:
+        raise PermissionDenied("user_is_unauthenticated")
