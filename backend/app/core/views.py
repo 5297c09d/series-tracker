@@ -41,14 +41,15 @@ def login_user_view(request: WSGIRequest):
 @require_GET
 @csrf_exempt
 def serials_list_view(request: WSGIRequest, user_id: int):
-    serials_list_vo = SerialsListVO(user_id=user_id)
     try:
+        serials_list_vo = SerialsListVO(user_id=user_id)
         response = json.dumps(serials_list_service(request, serials_list_vo))
-    except PermissionDenied:
-        return HttpResponse(status=403)
-    if isinstance(response, HttpResponse):
-        return response
-    else:
         serials_list_response = SerialsListResponse.model_validate_json(response)
         serials_list_response = SerialsListResponse.model_dump_json(serials_list_response)
         return JsonResponse(serials_list_response, safe=False)
+
+    except PermissionDenied as e:
+        return JsonResponse(status=403, data=e.args, safe=False)
+
+    except Exception:
+        return JsonResponse(status=500, data={'error': 'unknown_error'}, safe=False)

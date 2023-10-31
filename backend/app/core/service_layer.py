@@ -36,11 +36,11 @@ def login_user_service(request: WSGIRequest, login_user_vo: LoginUserVO):
 def serials_list_service(request: WSGIRequest, user_id: SerialsListVO):
     validate_auth_service(request.user)
     if request.user.id != user_id.user_id:
-        raise PermissionDenied
+        raise PermissionDenied("user_has_no_permission")
     serials_query = list(Bookmark.objects.filter(owner=user_id.user_id).values())
     return serials_query
 
 
 def validate_auth_service(user: User):
     if not user.is_authenticated:
-        raise PermissionDenied
+        raise PermissionDenied("user_is_unauthenticated")
