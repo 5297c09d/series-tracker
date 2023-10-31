@@ -1,9 +1,7 @@
-import json
 
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import PermissionDenied
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
 
 from core.models import User, Bookmark
 from validators.validators import LoginUserVO, LoginUserRequest, RegisterUserVO, CheckAuthVO, SerialsListVO
@@ -30,7 +28,7 @@ def login_user_service(request: WSGIRequest, login_user_vo: LoginUserVO):
     if user is not None:
         login(request, user)
         return {'user_id': user.id}
-    return User.DoesNotExist
+    raise User.DoesNotExist("user_does_not_exist")
 
 
 def serials_list_service(request: WSGIRequest, user_id: SerialsListVO):

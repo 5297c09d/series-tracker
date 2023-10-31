@@ -1,41 +1,53 @@
 import json
 
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
 
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 
 from core.service_layer import register_user_service, \
-                               login_user_service, \
-                               serials_list_service
+    login_user_service, \
+    serials_list_service
 from validators.validators import RegisterUserRequest, \
-                               RegisterUserVO, \
-                               LoginUserRequest, \
-                               LoginUserVO, \
-                               SerialsListVO, \
-                               SerialsListResponse
+    RegisterUserVO, \
+    LoginUserRequest, \
+    LoginUserVO, \
+    SerialsListVO, \
+    SerialsListResponse
 
 
 @require_POST
 @csrf_exempt
 def register_user_view(request: WSGIRequest):
-    register_user_request = RegisterUserRequest.model_validate_json(request.body)
-    register_vo = RegisterUserVO(**register_user_request.model_dump())
+    try:
+        register_user_request = RegisterUserRequest.model_validate_json(request.body)
+        register_vo = RegisterUserVO(**register_user_request.model_dump())
+        response = register_user_service(request, register_vo)
+        return JsonResponse(response)
 
-    response = register_user_service(request, register_vo)
-    return JsonResponse(response)
+    except ObjectDoesNotExist as e:
+        return JsonResponse(status=403, data=e.args, safe=False)
+
+    except Exception:
+        return JsonResponse(status=500, data={'error': 'unknown_error'}, safe=False)
 
 
 @require_POST
 @csrf_exempt
 def login_user_view(request: WSGIRequest):
-    login_user_request = LoginUserRequest.model_validate_json(request.body)
-    login_vo = LoginUserVO(**login_user_request.model_dump())
+    try:
+        login_user_request = LoginUserRequest.model_validate_json(request.body)
+        login_vo = LoginUserVO(**login_user_request.model_dump())
+        login_user_response = login_user_service(request, login_vo)
+        return JsonResponse(login_user_response)
 
-    login_user_response = login_user_service(request, login_vo)
-    return JsonResponse(login_user_response)
+    except ObjectDoesNotExist as e:
+        return JsonResponse(status=403, data=e.args, safe=False)
+
+    except Exception:
+        return JsonResponse(status=500, data={'error': 'unknown_error'}, safe=False)
 
 
 @require_GET
