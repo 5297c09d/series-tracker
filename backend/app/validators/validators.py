@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from pydantic import BaseModel, AnyHttpUrl, RootModel
 
 
@@ -38,6 +40,7 @@ class SerialsListVO(BaseModel):
 
 
 class SerialsListResponseItem(BaseModel):
+    id: UUID
     series_name: str
     series_link: AnyHttpUrl
     owner_id: int
@@ -45,3 +48,27 @@ class SerialsListResponseItem(BaseModel):
 
 class SerialsListResponse(RootModel):
     root: list[SerialsListResponseItem]
+
+
+class AddBookmarkRequest(BaseModel):
+    id: UUID
+    series_name: str
+    series_link: AnyHttpUrl
+    owner_id: int
+
+
+class AddBookmarkVO(BaseModel):
+    id: UUID
+    series_name: str
+    series_link: AnyHttpUrl
+    owner_id: int
+
+
+class DeleteBookmarkRequest(BaseModel):
+    id: UUID
+    owner_id: int
+
+
+class DeleteBookmarkVO(BaseModel):
+    id: UUID
+    owner_id: int
