@@ -5,17 +5,18 @@ from django.core.handlers.wsgi import WSGIRequest
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_POST, require_GET, require_http_methods
+from pydantic import ValidationError
 
 from core.service_layer import register_user_service, \
     login_user_service, \
-    serials_list_service
+    serials_list_service, delete_series_service, add_series_service
 from validators.validators import RegisterUserRequest, \
     RegisterUserVO, \
     LoginUserRequest, \
     LoginUserVO, \
     SerialsListVO, \
-    SerialsListResponse
+    SerialsListResponse, AddBookmarkRequest, DeleteBookmarkVO, DeleteBookmarkRequest, AddBookmarkVO
 
 
 @require_POST
@@ -65,3 +66,47 @@ def serials_list_view(request: WSGIRequest, user_id: int):
 
     except Exception:
         return JsonResponse(status=500, data={'error': 'unknown_error'}, safe=False)
+
+
+@require_http_methods(["PUT", "DELETE"])
+@csrf_exempt
+def add_or_delete_series_view(request: WSGIRequest, user_id: int, series_id: int):
+    if request.method == "PUT":
+        try:
+            request_body = json.loads(request.body)
+            request_body['id'] = series_id
+            request_body['owner_id'] = user_id
+            add_bookmark_request = AddBookmarkRequest.model_validate(request_body)
+            add_bookmark_vo = AddBookmarkVO(**add_bookmark_request.model_dump())
+            response = add_series_service(request.user, add_bookmark_vo)
+            return JsonResponse(response, safe=False)
+
+        except ObjectDoesNotExist as e:
+            return JsonResponse(status=403, data=e.args, safe=False)
+
+        except PermissionDenied as e:
+            return JsonResponse(status=403, data=e.args, safe=False)
+
+        except Exception:
+            return JsonResponse(status=500, data={'error': 'unknown_error'}, safe=False)
+
+        except ValidationError:
+            return JsonResponse(status=500, data={'error': 'validation_error'}, safe=False)
+
+    if request.method == "DELETE":
+        try:
+            delete_bookmark_vo = DeleteBookmarkVO(id=series_id, owner_id=user_id)
+            response = delete_series_service(request.user, delete_bookmark_vo)
+            return JsonResponse(response)
+
+        except PermissionDenied as e:
+            return JsonResponse(status=403, data=e.args, safe=False)
+
+        except ObjectDoesNotExist as e:
+            return JsonResponse(status=403, data=e.args, safe=False)
+
+        except ValidationError:
+            return JsonResponse(status=500, data={'error': 'validation_error'}, safe=False)
+
+        except Exception:
+            return JsonResponse(status=500, data={'error': 'unknown_error'}, safe=False)
