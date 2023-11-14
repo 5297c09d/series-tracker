@@ -1,9 +1,11 @@
 <template>
     <div class="bookmark-card">
+
         <div class="bookmark-content">
-            <!-- Примените стили к тексту внутри закладки -->
-            <p class="bookmark-name">{{ bookmark.name.toUpperCase() }}</p>
-            <a :href="bookmark.link" target="_blank">{{ bookmark.name }}</a>
+
+            <p class="bookmark-name">{{ bookmark && bookmark.name ? bookmark.name.toUpperCase() : '' }}</p>
+            <a :href="bookmark && bookmark.link" target="_blank">{{ bookmark && bookmark.name }}</a>
+
 
             <button @click="removeBookmark">🗑️</button>
         </div>
@@ -14,48 +16,47 @@
 export default {
     name: 'BookmarkCard',
     props: {
-        bookmark: Object // Свойство, которое ожидает объект bookmark
+        bookmark: Object
     },
 
     methods: {
-    removeBookmark() {
-      // Вызывайте событие для удаления закладки, передавая `bookmark` в родительский компонент
-      this.$emit('remove', this.bookmark);
+        removeBookmark() {
+
+            this.$emit('remove', this.bookmark);
+        }
     }
-  }
 }
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Abel&display=swap');
+
 .bookmark-card {
-    /* border: 1px solid #3696b9; */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 10px;
-    background-color: #8ca0ff;
-    border-radius: 5px;
+    background-color: #1C1A1C;
+    border-radius: 19px;
     text-align: center;
 }
 
 a {
-    color: #1100ff;
-    /* Цвет ссылки */
+    color: #fa82ae;
 }
 
 .bookmark-content {
     text-align: center;
-    /* Выравнивает текст по центру */
+    font-family: 'Abel', sans-serif;
+
 }
 
 .bookmark-name {
+    color: wheat;
+    font-family: 'Abel', sans-serif;
     font-size: 18px;
-    /* Размер шрифта для имени */
     font-weight: bold;
-    /* Жирный шрифт */
-    /* Дополнительные стили для имени */
 }
 
 .bookmark-link {
     font-size: 14px;
-    /* Размер шрифта для ссылки */
-    /* Дополнительные стили для ссылки */
-}</style>
+}
+</style>

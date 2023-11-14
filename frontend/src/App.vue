@@ -1,11 +1,12 @@
 <template>
   <section id="page">
     <header class="header">
-      <h1>Series Tracker</h1>
+      <div class="div">TV Show Tracker</div>
     </header>
-    <main>|
+    <main>
         <div id="app">
-          <bookmarksPage></bookmarksPage>
+          <loginPage></loginPage>
+          <!--<bookmarksPage></bookmarksPage>-->
          <!---как то сделать сюда импорт из loginPage и страницы закладок-->
         </div>
     </main>
@@ -15,12 +16,15 @@
 
 <script>
 
-import bookmarksPage from './pages/bookmarksPage.vue';
+// import bookmarksPage from './pages/bookmarksPage.vue';
+
+import loginPage from './pages/loginPage.vue';
 
 export default {
   name: 'App',
   components: {
-    bookmarksPage,
+    loginPage
+    // bookmarksPage,
   }
 }
 
@@ -28,7 +32,7 @@ export default {
 
 <style>
 /* TODO: Скачать и вставить */
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitter&display=swap');
 
 :root {
   --color-pink: #bb509a;
@@ -48,44 +52,36 @@ body,
   height: 100%;
   grid-template-areas:
     "head"
-    "main"
-    "foot";
-  grid-template-rows: 50px 1fr 30px;
+    "main";
+    /* "foot"; */
+  grid-template-rows: 100px 1fr;
 }
 
 #page>header {
   grid-area: head;
-  background-color: #8ca0ff;
+  background-color: #0d1117;
 }
 
 #page>main {
   grid-area: main;
-  background-color: #ffff64;
+  background-color:#21262d;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#page>footer {
+/* #page>footer {
   grid-area: foot;
-  background-color: #8cffa0;
-}
+  background-color: rgba(98, 168, 135, 1);
+} */
 
-.header {
-  font-family: 'Comic Neue', cursive;
+ 
+  .header {
+    font-family: 'Bitter', serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: black
-    /* Размер высоты, чтобы заголовок был посередине вертикально */
-}
-
-.header h1 {
-  font-size: 40px;
-  /* Размер шрифта заголовка */
-  text-align: center;
-  /* Выравнивание текста по центру горизонтально */
-}
-
-
+  color: wheat;
+  font-size: 60px;
+  }
 </style>

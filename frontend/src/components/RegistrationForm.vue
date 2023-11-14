@@ -80,14 +80,12 @@ export default {
   
   
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abel&display=swap');
 
 .registration-card {
-  background-color: #8ca0ff;
-  border-radius: 100px;
-  /* Rounded corners for the card */
-  box-shadow: 0 5px 13px rgb(63, 63, 63);
-  /* Shadow effect */
+  background-color: #1C1A1C;
+  border-radius: 40px;
+  box-shadow: 0 5px 13px rgb(0, 0, 0);
   padding: 50px;
   max-width: 300px;
   width: 100%;
@@ -96,14 +94,15 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
+  }
 
 .registration-form {
-  font-family: 'Comic Neue', cursive;
+  font-family: 'Abel', sans-serif;
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 20px;
-  max-width: 400px;
+  max-width: 300px;
+  color:wheat
 }
 
 .input-container {
@@ -117,30 +116,34 @@ label {
 
 input {
   padding: 10px;
-  border: 1px solid #000000ef;
-  border-radius: 20px;
+  border-radius: 13px;
   outline: none;
+  color:#FF2C78
 }
 
 button.rounded-button {
-  font-family: 'Comic Neue', cursive;
-  background-color: #3f6c9b;
-  color: #000000;
-  border: 1px solid #000000ef;
-  border-radius: 30px;
-  padding: 15px 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  box-shadow: 0 5px 13px rgb(63, 63, 63);
-  margin: auto;
-  width: 50%;
+  font-family: 'Abel', sans-serif;
+  padding: 10px 20px;
+  border: none;
+  font-size: 17px;
+  color: #fff;
+  border-radius: 7px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: 0.5s;
+  transition-property: box-shadow;
 }
 
+button.rounded-button {
+  background: #FF2C78;
+  box-shadow: 0 0 25px #fa82ae
+}
 button.rounded-button:hover {
-  font-family: 'Comic Neue', cursive;
-  background-color: #225184;
-  transform: scale(1.05);
-  color: #ffffff;
+  box-shadow: 0 0 5px #FF2C78,
+    0 0 25px #FF2C78,
+    0 0 50px #fa82ae,
+    0 0 100px #fa82ae;
 }
 
 .has-error {
@@ -156,7 +159,14 @@ button.rounded-button:hover {
 }
 
 .button-spacing {
-  margin-top: 30px; 
-}
+    margin-top: 30px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: 'Abel', sans-serif;
+    color: #000000; 
+    font-size: 18px
+  }
+
 </style>
   
